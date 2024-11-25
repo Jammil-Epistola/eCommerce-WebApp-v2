@@ -1,7 +1,6 @@
-# E-Commerce Product Management Web Application (REACT) 3CS - A
+# E-Commerce Product Management Web Application ver 2.0 (REACT & Laravel) 3CS - A
 
 # Members:
-- De Honor
 - Delicano
 - Enriquez
 - Epistola
