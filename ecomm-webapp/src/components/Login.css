@@ -1,0 +1,30 @@
+body {
+  background-color: #e1f0d1 !important;
+  margin: 0;
+  height: 100vh;
+}
+
+/* Login container to center the card */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Customize the login card */
+.login-card {
+  width: 100%;
+  max-width: 400px;  
+  background-color: #283f3b !important;
+  color: #e9f5db !important;
+  padding: 20px;
+}
+
+/* Button style */
+.login-button {
+  background-color: #748b58 !important;
+  border-color: #50623A !important;
+  width: 100% !important;
+  padding: 10px !important;
+}
