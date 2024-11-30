@@ -1,4 +1,3 @@
-/* FrontStore.css */
 
 /* General Body Styling */
 body {
@@ -44,7 +43,7 @@ body {
 .my-3 .btn-primary {
     border-radius: 30px;
     padding: 0.5rem 1.5rem;
-    background-color: #007bff;
+    background-color: #176300;
     border: none;
 }
 
