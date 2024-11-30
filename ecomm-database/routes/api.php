@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductCRUD;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,11 @@ use App\Http\Controllers\ProductCRUD;
 |
 */
 
+//User Registration
+Route::post('/register', [UserController::class, 'register']);
+Route::get('/users', [UserController::class, 'index']);
+
+// Admin Dashboard
 Route::get('/products', [ProductCRUD::class, 'index']);
 Route::post('/products', [ProductCRUD::class, 'store']);
 Route::put('/products/{id}', [ProductCRUD::class, 'update']);
