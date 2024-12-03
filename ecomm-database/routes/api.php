@@ -20,6 +20,9 @@ use App\Http\Controllers\UserController;
 Route::post('/register', [UserController::class, 'register']);
 Route::get('/users', [UserController::class, 'index']);
 
+//Login
+Route::post('/login', [UserController::class, 'login']);
+
 // Admin Dashboard
 Route::get('/products', [ProductCRUD::class, 'index']);
 Route::post('/products', [ProductCRUD::class, 'store']);

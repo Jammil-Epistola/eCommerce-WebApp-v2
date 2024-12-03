@@ -21,7 +21,6 @@ const UserRegister = () => {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Validate form locally
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -41,7 +40,7 @@ const UserRegister = () => {
         const data = await response.json();
         setSuccessMessage(data.message || 'Registration successful!'); // Display server response
         setErrors({});
-        setFormData({ username: '', email: '', password: '' }); // Reset form
+        setFormData({ username: '', email: '', password: '' }); 
       } else {
         const errorData = await response.json();
         setErrors(errorData.errors || { general: errorData.message || 'Registration failed.' });

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    // Store a new user
+    // Register a new user
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -16,15 +16,35 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
-        // Hash the password
+    
         $validated['password'] = Hash::make($validated['password']);
-
-        // Create the user
+        $validated['role'] = 'user'; 
+    
         User::create($validated);
-
+    
         return response()->json(['message' => 'Registration successful'], 201);
     }
+
+    //Login a Registered User
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+    
+        $user = User::where('email', $request->email)->first();
+    
+        if ($user && Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'message' => 'Login successful',
+                'role' => $user->role, 
+            ], 200);
+        }
+    
+        return response()->json(['message' => 'Invalid email or password'], 401);
+    }
+
 
     // Fetch all users
     public function index()
