@@ -158,3 +158,19 @@ body {
     background-color: #007bff;
     font-size: 0.8rem;
 }
+
+/* Logout Button Styling */
+.navbarBackground .btn-danger {
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 30px;
+}
+
+.navbarBackground .btn-danger:hover {
+    background-color: #c82333;
+    color: white;
+}

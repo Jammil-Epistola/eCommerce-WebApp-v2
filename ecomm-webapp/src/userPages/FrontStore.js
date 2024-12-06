@@ -42,6 +42,14 @@ const FrontStore = () => {
     const handleShowCart = () => setShowCartModal(true);
     const handleCloseCart = () => setShowCartModal(false);
 
+    // Logout function
+    const handleLogout = () => {
+        // Clear any authentication tokens or user data
+        localStorage.removeItem('authToken');
+        // Redirect to login or home page
+        window.location.href = '/login';
+    };
+
     // Filtered products based on search and category
     const filteredProducts = products.filter(product => {
         return (
@@ -61,8 +69,11 @@ const FrontStore = () => {
                     <Navbar.Brand href="#">My Store</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                        <Button variant="light" onClick={handleShowCart}>
+                        <Button variant="light" onClick={handleShowCart} className="me-2">
                             Cart <Badge bg="secondary">{cart.length}</Badge>
+                        </Button>
+                        <Button variant="danger" onClick={handleLogout}>
+                            Logout
                         </Button>
                     </Navbar.Collapse>
                 </Container>
