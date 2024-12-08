@@ -11,17 +11,8 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    // Hardcoded admin login logic
-    if (email === 'admin@gmail.com' && password === 'password') {
-      onLogin('admin'); // Pass role as 'admin'
-      setErrorMessage('');
-      navigate('/dashboard'); // Redirect admin to Dashboard
-      return;
-    }
-
+  
     try {
-      // Send login request to the backend for user authentication
       const response = await fetch('http://localhost:8000/api/login', {
         method: 'POST',
         headers: {
@@ -29,24 +20,39 @@ const Login = ({ onLogin }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-
+  
+      console.log('Response:', response);
+  
       if (response.ok) {
         const data = await response.json();
-
-        // Check the role returned by the backend
+        console.log('Data:', data);
+  
         if (data.role === 'user') {
-          onLogin('user'); // Pass role as 'user'
+          onLogin('user');
           setErrorMessage('');
-          navigate('/user-dashboard'); // Redirect to User Dashboard
+          navigate('/frontstore');
+        } else if (data.role === 'admin') {
+          onLogin('admin');
+          setErrorMessage('');
+          navigate('/dashboard');
         } else {
           setErrorMessage('Unauthorized access');
         }
       } else {
         const errorData = await response.json();
+        console.log('Error Data:', errorData);
         setErrorMessage(errorData.message || 'Invalid email or password');
       }
     } catch (error) {
+      console.error('Error:', error);
       setErrorMessage('An error occurred. Please try again later.');
+    }
+  
+    // Hardcoded admin login fallback
+    if (email === 'admin@gmail.com' && password === 'password') {
+      onLogin('admin');
+      setErrorMessage('');
+      navigate('/dashboard'); 
     }
   };
 

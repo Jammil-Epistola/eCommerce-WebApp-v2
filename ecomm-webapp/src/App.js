@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import Dashboard from './adminPages/Dashboard'; 
-import UserDashboard from './userPages/FrontStore';
-import Login from './loginComponents/Login'; 
+import Dashboard from './adminPages/Dashboard';
+import FrontStore from './userPages/FrontStore';
+import Login from './loginComponents/Login';
 import UserRegister from './loginComponents/UserRegister';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(''); // Track role (admin/user)
+  const [userRole, setUserRole] = useState('');
 
-  // Handle login logic and set user role
   const handleLogin = (role) => {
     setIsLoggedIn(true);
-    setUserRole(role); // Set the logged-in user's role
+    setUserRole(role);
   };
 
   const handleLogout = () => {
@@ -32,7 +31,7 @@ function App() {
               userRole === 'admin' ? (
                 <Navigate to="/dashboard" />
               ) : (
-                <Navigate to="/user-dashboard" />
+                <Navigate to="/frontstore" /> 
               )
             ) : (
               <Login onLogin={handleLogin} />
@@ -41,7 +40,7 @@ function App() {
         />
         <Route path="/register" element={<UserRegister />} />
 
-        {/* Protected Admin Dashboard Route */}
+        {/* Admin Dashboard Route */}
         <Route
           path="/dashboard"
           element={
@@ -53,12 +52,12 @@ function App() {
           }
         />
 
-        {/* Protected User Dashboard Route */}
+        {/*User FrontStore Route */}
         <Route
-          path="/user-dashboard"
+          path="/frontstore"
           element={
             isLoggedIn && userRole === 'user' ? (
-              <UserDashboard onLogout={handleLogout} />
+              <FrontStore onLogout={handleLogout} />
             ) : (
               <Navigate to="/" />
             )
