@@ -38,6 +38,17 @@ const FrontStore = () => {
         setCart(prevCart => prevCart.filter(item => item.id !== product.id));
     };
 
+    // Update quantity from the cart
+    const updateQuantity = (product, quantity) => {
+        setCart(prevCart =>
+            prevCart.map(item =>
+                item.id === product.id
+                    ? { ...item, quantity: Math.max(quantity, 1) }
+                    : item
+            )
+        );
+    };
+
     // Handle cart modal visibility
     const handleShowCart = () => setShowCartModal(true);
     const handleCloseCart = () => setShowCartModal(false);
