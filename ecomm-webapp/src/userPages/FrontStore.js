@@ -42,6 +42,14 @@ const FrontStore = () => {
     const handleShowCart = () => setShowCartModal(true);
     const handleCloseCart = () => setShowCartModal(false);
 
+    // Logout function
+    const handleLogout = () => {
+        // Clear any authentication tokens or user data
+        localStorage.removeItem('authToken');
+        // Redirect to login or home page
+        window.location.href = '/login';
+    };
+
     // Filtered products based on search and category
     const filteredProducts = products.filter(product => {
         return (
@@ -61,8 +69,11 @@ const FrontStore = () => {
                     <Navbar.Brand href="#">My Store</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                        <Button variant="light" onClick={handleShowCart}>
+                        <Button variant="light" onClick={handleShowCart} className="me-2">
                             Cart <Badge bg="secondary">{cart.length}</Badge>
+                        </Button>
+                        <Button variant="danger" onClick={handleLogout}>
+                            Logout
                         </Button>
                     </Navbar.Collapse>
                 </Container>
@@ -122,8 +133,8 @@ const FrontStore = () => {
                 </Row>
             </Container>
 
-            {/* Cart Modal */}
-            <Modal show={showCartModal} onHide={handleCloseCart}>
+             {/* Cart Modal */}
+             <Modal show={showCartModal} onHide={handleCloseCart}>
                 <Modal.Header closeButton>
                     <Modal.Title>Your Cart</Modal.Title>
                 </Modal.Header>
@@ -133,24 +144,51 @@ const FrontStore = () => {
                     ) : (
                         <ul className="list-group">
                             {cart.map(item => (
-                                <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>{item.name}</strong> - ₱{item.price} x {item.quantity}
+                                <li key={item.id} className="list-group-item">
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{item.name}</strong> = ₱
+                                            {item.price * item.quantity}
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <Button
+                                                variant="outline-secondary"
+                                                size="sm"
+                                                onClick={() => updateQuantity(item, item.quantity - 1)}
+                                            >
+                                                -
+                                            </Button>
+                                            <span className="mx-2">{item.quantity}</span>
+                                            <Button
+                                                variant="outline-secondary"
+                                                size="sm"
+                                                onClick={() => updateQuantity(item, item.quantity + 1)}
+                                            >
+                                                +
+                                            </Button>
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                className="ms-3"
+                                                onClick={() => removeFromCart(item)}
+                                            >
+                                                Remove
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <Button variant="danger" size="sm" onClick={() => removeFromCart(item)}>
-                                        Remove
-                                    </Button>
                                 </li>
                             ))}
                         </ul>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <h5>Total: ₱{cartTotal}</h5>
+                    <h5>Total: ₱{cartTotal.toFixed(2)}</h5>
                     <Button variant="secondary" onClick={handleCloseCart}>
                         Close
                     </Button>
-                    <Button variant="primary">Proceed to Checkout</Button>
+                    <Button variant="primary" disabled={cart.length === 0}>
+                        Proceed to Checkout
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>
