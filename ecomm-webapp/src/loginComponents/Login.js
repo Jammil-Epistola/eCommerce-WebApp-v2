@@ -3,7 +3,7 @@ import { Card, Form, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
+const Login = ({ onLogin, setIsLoggedIn, setUserRole, setCart }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -11,8 +11,19 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
+    // Hardcoded admin login fallback
+    if (email === 'admin@gmail.com' && password === 'password') {
+      onLogin('admin'); // Call the onLogin prop to set the role
+      setIsLoggedIn(true);
+      setUserRole('admin');
+      setErrorMessage('');
+      navigate('/dashboard'); // Redirect to admin dashboard
+      return;
+    }
+
     try {
+      // Dynamic user login via backend
       const response = await fetch('http://localhost:8000/api/login', {
         method: 'POST',
         headers: {
@@ -20,39 +31,36 @@ const Login = ({ onLogin }) => {
         },
         body: JSON.stringify({ email, password }),
       });
-  
-      console.log('Response:', response);
-  
+
       if (response.ok) {
         const data = await response.json();
-        console.log('Data:', data);
-  
-        if (data.role === 'user') {
-          onLogin('user');
-          setErrorMessage('');
+        const { token, role, cart } = data; 
+
+        // Save the token in localStorage
+        localStorage.setItem('authToken', token);
+
+        // Set the login state and user role
+        setIsLoggedIn(true);
+        setUserRole(role);
+
+        // Set the cart data if available
+        if (cart) {
+          setCart(cart);
+        }
+
+        // Redirect to the appropriate page for the user
+        if (role === 'user') {
           navigate('/frontstore');
-        } else if (data.role === 'admin') {
-          onLogin('admin');
-          setErrorMessage('');
-          navigate('/dashboard');
         } else {
-          setErrorMessage('Unauthorized access');
+          setErrorMessage('Unexpected user role');
         }
       } else {
         const errorData = await response.json();
-        console.log('Error Data:', errorData);
         setErrorMessage(errorData.message || 'Invalid email or password');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error during login:', error);
       setErrorMessage('An error occurred. Please try again later.');
-    }
-  
-    // Hardcoded admin login fallback
-    if (email === 'admin@gmail.com' && password === 'password') {
-      onLogin('admin');
-      setErrorMessage('');
-      navigate('/dashboard'); 
     }
   };
 
@@ -60,7 +68,7 @@ const Login = ({ onLogin }) => {
     <div className="login-container">
       <Card className="login-card">
         <Card.Body>
-          <Card.Title className="text-center">Product Management Login</Card.Title>
+          <Card.Title className="text-center">Lazapii</Card.Title>
           <Form onSubmit={handleLogin}>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>

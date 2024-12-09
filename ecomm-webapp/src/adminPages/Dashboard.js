@@ -124,7 +124,7 @@ const Dashboard = ({ onLogout }) => {
             {/* Navbar */}
             <Navbar expand="lg" variant="dark" className="navbarBackground">
                 <Container>
-                    <Navbar.Brand href="#">Dashboard</Navbar.Brand>
+                    <Navbar.Brand href="#">Lazapii Product Management System</Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
                         <Nav>

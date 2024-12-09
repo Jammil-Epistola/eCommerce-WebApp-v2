@@ -32,17 +32,28 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         $user = User::where('email', $request->email)->first();
-    
+
         if ($user && Hash::check($request->password, $user->password)) {
+            // Generate a personal access token for the user
+            $token = $user->createToken('authToken')->plainTextToken;
+
             return response()->json([
                 'message' => 'Login successful',
+                'token' => $token,
                 'role' => $user->role, 
             ], 200);
         }
-    
+
         return response()->json(['message' => 'Invalid email or password'], 401);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->currentAccessToken()->delete();
+
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
 

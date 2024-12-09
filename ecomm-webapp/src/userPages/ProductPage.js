@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Container, Card, Button, Modal, Navbar, Badge } from 'react-bootstrap';
 import '../AdminAndUser.css';
 
@@ -7,6 +7,7 @@ const ProductPage = ({ cart, setCart, onLogout }) => {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [showCartModal, setShowCartModal] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://127.0.0.1:8000/api/products/${id}`)
@@ -39,11 +40,21 @@ const ProductPage = ({ cart, setCart, onLogout }) => {
     // Calculate total price of items in the cart
     const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
+    const handleProceedToCheckout = () => {
+        if (cart.length === 0) {
+          alert('Your cart is empty. Add some items before proceeding to checkout.');
+          return;
+        }
+        navigate('/checkout'); 
+      };
+
+    const returnFrontStore = () => navigate('/frontstore');
+
     return (
         <div className="product-page">
             <Navbar expand="lg" variant="dark" className="navbarBackground">
                 <Container>
-                    <Navbar.Brand href="/frontstore">Lazapii</Navbar.Brand>
+                    <Navbar.Brand onClick={returnFrontStore}>Lazapii</Navbar.Brand>
                     <Button variant="light" onClick={() => setShowCartModal(true)} className="me-2">
                         Cart <Badge bg="secondary">{cart.length}</Badge>
                     </Button>
@@ -59,6 +70,10 @@ const ProductPage = ({ cart, setCart, onLogout }) => {
                         <Card.Body>
                             <Card.Title>{product.name}</Card.Title>
                             <Card.Text>₱{product.price}</Card.Text>
+                            <hr/>
+                            <Card.Text>Description: {product.description}</Card.Text>
+                            <Card.Text>Category: {product.category}</Card.Text>
+                            <Card.Text>Available Quantity: {product.avail_quantity}</Card.Text>
                             <Button variant="success" onClick={() => addToCart(product)}>
                                 Add to Cart
                             </Button>
@@ -104,7 +119,7 @@ const ProductPage = ({ cart, setCart, onLogout }) => {
                     <Button variant="secondary" onClick={() => setShowCartModal(false)}>
                         Close
                     </Button>
-                    <Button variant="primary">Proceed to Checkout</Button>
+                    <Button variant="primary" onClick={handleProceedToCheckout} >Proceed to Checkout</Button>
                 </Modal.Footer>
             </Modal>
         </div>
