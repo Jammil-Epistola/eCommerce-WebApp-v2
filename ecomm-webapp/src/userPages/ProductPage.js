@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Container, Row, Col, Card, Button, Modal, Navbar, Badge } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { Container, Card, Button, Modal, Navbar, Badge } from 'react-bootstrap';
 import '../AdminAndUser.css';
 
-const FrontStore = ({ cart, setCart, onLogout }) => {
-    const [products, setProducts] = useState([]);
+const ProductPage = ({ cart, setCart, onLogout }) => {
+    const { id } = useParams();
+    const [product, setProduct] = useState(null);
     const [showCartModal, setShowCartModal] = useState(false);
-    const navigate = useNavigate();
 
-    // Fetch products from the Laravel API
     useEffect(() => {
-        fetch('http://127.0.0.1:8000/api/products')
+        fetch(`http://127.0.0.1:8000/api/products/${id}`)
             .then((response) => response.json())
-            .then((data) => setProducts(data))
-            .catch((error) => console.error('Error fetching products:', error));
-    }, []);
+            .then((data) => setProduct(data))
+            .catch((error) => console.error('Error fetching product:', error));
+    }, [id]);
 
-    // Redirect to ProductPage.js
-    const handleProductClick = (productId) => {
-        navigate(`/product/${productId}`);
+    // Add product to cart
+    const addToCart = (product) => {
+        setCart((prevCart) => {
+            const itemInCart = prevCart.find((item) => item.id === product.id);
+            if (itemInCart) {
+                return prevCart.map((item) =>
+                    item.id === product.id
+                        ? { ...item, quantity: item.quantity + 1 }
+                        : item
+                );
+            } else {
+                return [...prevCart, { ...product, quantity: 1 }];
+            }
+        });
     };
 
     // Remove product from cart
@@ -30,41 +40,33 @@ const FrontStore = ({ cart, setCart, onLogout }) => {
     const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
-        <div className="front-store">
-            {/* Navbar */}
+        <div className="product-page">
             <Navbar expand="lg" variant="dark" className="navbarBackground">
                 <Container>
-                    <Navbar.Brand href="#">Lazapii</Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-                        <Button variant="light" onClick={() => setShowCartModal(true)} className="me-2">
-                            Cart <Badge bg="secondary">{cart.length}</Badge>
-                        </Button>
-                        <Button variant="danger" onClick={onLogout}>
-                            Logout
-                        </Button>
-                    </Navbar.Collapse>
+                    <Navbar.Brand href="/frontstore">Lazapii</Navbar.Brand>
+                    <Button variant="light" onClick={() => setShowCartModal(true)} className="me-2">
+                        Cart <Badge bg="secondary">{cart.length}</Badge>
+                    </Button>
+                    <Button variant="danger" onClick={onLogout}>
+                        Logout
+                    </Button>
                 </Container>
             </Navbar>
 
-            {/* Product List */}
-            <Container>
-                <Row>
-                    {products.map((product) => (
-                        <Col md={4} key={product.id} className="my-2">
-                            <Card
-                                className="cardBackground"
-                                onClick={() => handleProductClick(product.id)}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <Card.Body>
-                                    <Card.Title>{product.name}</Card.Title>
-                                    <Card.Text>₱{product.price}</Card.Text>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
+            <Container className="mt-5">
+                {product ? (
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>{product.name}</Card.Title>
+                            <Card.Text>₱{product.price}</Card.Text>
+                            <Button variant="success" onClick={() => addToCart(product)}>
+                                Add to Cart
+                            </Button>
+                        </Card.Body>
+                    </Card>
+                ) : (
+                    <p>Loading product...</p>
+                )}
             </Container>
 
             {/* Cart Modal */}
@@ -102,13 +104,11 @@ const FrontStore = ({ cart, setCart, onLogout }) => {
                     <Button variant="secondary" onClick={() => setShowCartModal(false)}>
                         Close
                     </Button>
-                    <Button variant="primary" disabled={cart.length === 0}>
-                        Proceed to Checkout
-                    </Button>
+                    <Button variant="primary">Proceed to Checkout</Button>
                 </Modal.Footer>
             </Modal>
         </div>
     );
 };
 
-export default FrontStore;
+export default ProductPage;

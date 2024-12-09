@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, InputGroup, Button, Navbar, Nav, Modal } from 'react-bootstrap';
-import './styleDashboard.css'; 
+import '../AdminAndUser.css';
 
 const Dashboard = ({ onLogout }) => {
     const [products, setProducts] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [category, setCategory] = useState('All');
     const [showModal, setShowModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);  // Delete confirmation modal
+    const [showDeleteModal, setShowDeleteModal] = useState(false);  // Delete confirmation
     const [editingProduct, setEditingProduct] = useState(null);  //  Edit
     const [productToDelete, setProductToDelete] = useState(null);  // Delete
 
@@ -15,7 +15,7 @@ const Dashboard = ({ onLogout }) => {
         barcode: '',
         name: '',
         description: '',
-        category: 'Electronics',  // Default
+        category: '',  
         avail_quantity: '',
         price: ''
     });
@@ -33,7 +33,7 @@ const Dashboard = ({ onLogout }) => {
             barcode: '',
             name: '',
             description: '',
-            category: 'Electronics', 
+            category: '', 
             avail_quantity: '',
             price: ''
         });
@@ -80,7 +80,7 @@ const Dashboard = ({ onLogout }) => {
                 barcode: '',
                 name: '',
                 description: '',
-                category: 'Electronics',
+                category: '',
                 avail_quantity: '',
                 price: ''
             });
@@ -151,20 +151,20 @@ const Dashboard = ({ onLogout }) => {
                     </Col>
                     <Col md={4}>
                         <Form.Select value={category} onChange={e => setCategory(e.target.value)}>
-                            <option value="All">All Categories</option>
-                            <option value="Accessories">Accessories</option>
-                            <option value="Appliances">Appliances</option>
-                            <option value="Clothing">Clothing</option>
-                            <option value="Electronics">Electronics</option>
-                            <option value="Frozen Goods">Frozen Goods</option>
-                            <option value="Fruits">Fruits</option>
-                            <option value="Laundry Supplies">Laundry Supplies</option>
-                            <option value="Office Supplies">Office Supplies</option>
-                            <option value="School Supplies">School Supplies</option>
-                            <option value="Shoes">Shoes</option>
-                            <option value="Sports">Sports</option>
-                            <option value="Toys">Toys</option>
-                            <option value="Vegetable">Vegetable</option>
+                        <option value="All">All Categories</option>
+                        <option value="Accessories">Accessories</option>
+                        <option value="Appliances">Appliances</option>
+                        <option value="Audio">Audio</option>
+                        <option value="Gaming">Gaming</option>
+                        <option value="Groceries">Groceries</option>
+                        <option value="Hobbies & Stationaries">Hobbies & Stationaries</option>
+                        <option value="Home Appliances">Home Appliances</option>
+                        <option value="Laptops & Computers">Laptops & Computers</option>
+                        <option value="Men's Apparel">Men's Apparel</option>
+                        <option value="Mobile & Gadgets">Mobile & Gadgets</option>
+                        <option value="Pet Care">Pet Care</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Women's Apparel">Women's Apparel</option>
                         </Form.Select>
                     </Col>
                     <Col md={3}>
@@ -257,19 +257,20 @@ const Dashboard = ({ onLogout }) => {
                                 value={newProduct.category}
                                 onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}
                             >
+                                <option value="All">All Categories</option>
                                 <option value="Accessories">Accessories</option>
                                 <option value="Appliances">Appliances</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Frozen Goods">Frozen Goods</option>
-                                <option value="Fruits">Fruits</option>
-                                <option value="Laundry Supplies">Laundry Supplies</option>
-                                <option value="Office Supplies">Office Supplies</option>
-                                <option value="School Supplies">School Supplies</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Gaming">Gaming</option>
+                                <option value="Groceries">Groceries</option>
+                                <option value="Hobbies & Stationaries">Hobbies & Stationaries</option>
+                                <option value="Home Appliances">Home Appliances</option>
+                                <option value="Laptops & Computers">Laptops & Computers</option>
+                                <option value="Men's Apparel">Men's Apparel</option>
+                                <option value="Mobile & Gadgets">Mobile & Gadgets</option>
+                                <option value="Pet Care">Pet Care</option>
                                 <option value="Shoes">Shoes</option>
-                                <option value="Sports">Sports</option>
-                                <option value="Toys">Toys</option>
-                                <option value="Vegetable">Vegetable</option>
+                                <option value="Women's Apparel">Women's Apparel</option>
                             </Form.Select>
                         </Form.Group>
                         <Form.Group controlId="productAvailQuantity" className="mt-3">

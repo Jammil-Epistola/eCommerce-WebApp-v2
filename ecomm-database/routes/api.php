@@ -23,6 +23,9 @@ Route::get('/users', [UserController::class, 'index']);
 //Login
 Route::post('/login', [UserController::class, 'login']);
 
+//FrontStore
+Route::get('/products/{id}', [ProductCRUD::class, 'show']);
+
 // Admin Dashboard
 Route::get('/products', [ProductCRUD::class, 'index']);
 Route::post('/products', [ProductCRUD::class, 'store']);
